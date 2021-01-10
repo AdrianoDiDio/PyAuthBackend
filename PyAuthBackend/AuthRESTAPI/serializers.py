@@ -1,6 +1,4 @@
 from rest_framework import serializers,exceptions as rest_exceptions
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from PyAuthBackend.AuthRESTAPI.models import User
 from django.core import exceptions
@@ -124,11 +122,10 @@ class BiometricTokenObtainSerializer(TokenObtainSerializer):
         self.user = authenticate(**authenticate_kwargs)
 
         if not default_user_authentication_rule(self.user):
-            invalid_biometric_token_response = {
-                'detail' :  _('Given Biometric Token was not valid.'),
-                'invalid_biometric_token' : 1
-            }
-            return Response(invalid_biometric_token_response,status=status.HTTP_401_UNAUTHORIZED)
+            raise rest_exceptions.AuthenticationFailed(
+                _('Given Biometric Token was not valid.'),
+                'invalid_biometric_token',
+            )
         return {}
 class BiometricTokenObtainPairSerializer(BiometricTokenObtainSerializer):
 
