@@ -81,7 +81,8 @@ class UserAuthTokenSerializer(serializers.ModelSerializer):
         write_only = True
     )
     def update(self,instance,validated_data):
-        instance.biometricToken = make_password(validated_data.get('biometricToken'))
+        decodedBiometricToken = base64.urlsafe_b64decode(validated_data.get('biometricToken'))
+        instance.biometricToken = make_password(decodedBiometricToken)
         instance.save()
         return instance
     class Meta:
