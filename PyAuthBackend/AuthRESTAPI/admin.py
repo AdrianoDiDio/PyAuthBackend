@@ -10,7 +10,6 @@ class CustomUserAdmin(UserAdmin):
             'Custom Field Heading',
             {
                 'fields': (
-                    'publicKey',
                     'biometricToken'
                 ),
             },

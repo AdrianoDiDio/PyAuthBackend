@@ -61,19 +61,6 @@ class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'password')
-
-class UserPublicKeySerializer(serializers.ModelSerializer):
-    publicKey = serializers.CharField(
-        required = True,
-        write_only = True
-    )
-    def update(self,instance,validated_data):
-        instance.publicKey = validated_data.get('publicKey')
-        instance.save()
-        return instance
-    class Meta:
-        model = User
-        fields = ('publicKey',)
         
 class UserAuthTokenSerializer(serializers.ModelSerializer):
     biometricToken = serializers.CharField(
