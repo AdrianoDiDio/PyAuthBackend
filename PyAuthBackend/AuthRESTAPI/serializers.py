@@ -9,6 +9,7 @@ import django.contrib.auth.password_validation as validators
 from rest_framework_simplejwt.serializers import TokenObtainSerializer,TokenObtainPairSerializer
 from rest_framework_simplejwt.authentication import default_user_authentication_rule
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.utils.translation import gettext as _
 import base64
 
 class UserSerializer(serializers.ModelSerializer):
@@ -100,6 +101,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class BiometricTokenObtainSerializer(TokenObtainSerializer):
     
+    error_message = {
+        'invalid_biometric_token': _('Given token was not valid.')
+    }
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].required = False
@@ -122,8 +127,8 @@ class BiometricTokenObtainSerializer(TokenObtainSerializer):
 
         if not default_user_authentication_rule(self.user):
             raise rest_exceptions.AuthenticationFailed(
-                self.error_messages['no_active_account'],
-                'no_active_account',
+                self.error_messages['invalid_biometric_token'],
+                'invalid_biometric_token',
             )
         return {}
 class BiometricTokenObtainPairSerializer(BiometricTokenObtainSerializer):
