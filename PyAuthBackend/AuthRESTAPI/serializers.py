@@ -1,5 +1,6 @@
 from rest_framework import serializers,exceptions as rest_exceptions
 from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from PyAuthBackend.AuthRESTAPI.models import User
 from django.core import exceptions
