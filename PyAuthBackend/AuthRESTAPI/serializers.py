@@ -4,6 +4,7 @@ from PyAuthBackend.AuthRESTAPI.models import User
 from django.core import exceptions
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
+from django.contrib.auth.hashers import make_password
 import django.contrib.auth.password_validation as validators
 from rest_framework_simplejwt.serializers import TokenObtainSerializer,TokenObtainPairSerializer
 from rest_framework_simplejwt.authentication import default_user_authentication_rule
@@ -79,7 +80,7 @@ class UserAuthTokenSerializer(serializers.ModelSerializer):
         write_only = True
     )
     def update(self,instance,validated_data):
-        instance.biometricToken = validated_data.get('biometricToken')
+        instance.biometricToken = make_password(validated_data.get('biometricToken'))
         instance.save()
         return instance
     class Meta:

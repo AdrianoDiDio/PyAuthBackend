@@ -22,6 +22,6 @@ class BiometricTokenAuthBackend(ModelBackend):
             userToCheck = User.objects.get(id=userId)
         except User.DoesNotExist:
             return None
-        if userToCheck.biometricToken == biometricToken:
+        if check_password(biometricToken,userToCheck.biometricToken):
             return userToCheck
         return None
