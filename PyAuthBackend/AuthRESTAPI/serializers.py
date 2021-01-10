@@ -101,10 +101,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class BiometricTokenObtainSerializer(TokenObtainSerializer):
     
-    error_message = {
-        'invalid_biometric_token': _('Given token was not valid.')
-    }
-        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].required = False
@@ -127,7 +123,7 @@ class BiometricTokenObtainSerializer(TokenObtainSerializer):
 
         if not default_user_authentication_rule(self.user):
             raise rest_exceptions.AuthenticationFailed(
-                self.error_messages['invalid_biometric_token'],
+                _('Given Biometric Token was not valid.'),
                 'invalid_biometric_token',
             )
         return {}
