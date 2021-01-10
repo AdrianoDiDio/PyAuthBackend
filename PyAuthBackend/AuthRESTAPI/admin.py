@@ -1,5 +1,18 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from PyAuthBackend.AuthRESTAPI.models import User
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-admin.site.register(User,UserAdmin)
+class CustomUserAdmin(UserAdmin):
+    fieldsets = (
+        *UserAdmin.fieldsets,
+            'Custom Field Heading',
+            {
+                'fields': (
+                    'publicKey',
+                    'biometricToken'
+                ),
+            },
+        ),
+    )
+admin.site.register(User,CustomUserAdmin)
