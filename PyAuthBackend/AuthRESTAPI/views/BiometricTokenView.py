@@ -27,7 +27,7 @@ PublicKey = openapi.Parameter('publicKey', openapi.IN_QUERY, description="Public
                               type=openapi.TYPE_STRING)
 
 @method_decorator(
-    name='post',
+    name='get',
     decorator=swagger_auto_schema(
         operation_description="Generate a new biometric token for the user using the Public Key.",
         responses={
@@ -40,13 +40,10 @@ PublicKey = openapi.Parameter('publicKey', openapi.IN_QUERY, description="Public
                     ),
                 }
             )
-        },
-        manual_parameters=[
-            PublicKey
-        ],
+        }
 ))
 
-class InitBiometricAuthentication(APIView):
+class GetBiometricChallenge(APIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserPublicKeySerializer
@@ -54,15 +51,15 @@ class InitBiometricAuthentication(APIView):
     def get_object(self):
         return User.objects.get(username=self.request.user)
 
-    def post(self,request):
+    def get(self,request):
         try:
             userInstance = self.get_object()
             challenge = str(uuid.uuid4())
             encodedChallenge = base64.urlsafe_b64encode(challenge.encode()).decode('UTF-8')
             encodedchallengeJSON = {"biometricChallenge" : encodedChallenge}
-            serializer = UserPublicKeySerializer(userInstance,data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            #serializer = UserPublicKeySerializer(userInstance,data=request.data)
+            #serializer.is_valid(raise_exception=True)
+            #serializer.save()
             return Response(encodedchallengeJSON,status=status.HTTP_200_OK)
         except exceptions.ValidationError as v:
             raise v
@@ -78,7 +75,8 @@ class GenerateBiometricTokenView(APIView):
     def post(self,request):
         try:
             userInstance = self.get_object()
-            publicKeyObject = RSA.importKey(base64.urlsafe_b64decode(userInstance.publicKey))
+            #publicKeyObject = RSA.importKey(base64.urlsafe_b64decode(userInstance.publicKey))
+            publicKeyObject = RSA.importKey(base64.urlsafe_b64decode(request.data['publicKey']))
             originalEncodedChallenge = base64.urlsafe_b64decode(request.data['serverBiometricChallenge']).decode("UTF-8")
             originalChallenge = originalEncodedChallenge + request.data['nonce']
             sentChallenge = base64.urlsafe_b64decode(request.data['signedBiometricChallenge'])

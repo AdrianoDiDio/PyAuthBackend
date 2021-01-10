@@ -18,7 +18,7 @@ urlpatterns = [
     re_path(r'^login/?$',views.LoginTokenObtainPairView.as_view(),name="Login"),
     re_path(r'^biometricLogin/?$',views.BiometricLoginTokenObtainPairView.as_view(),name="BiometricLogin"),
     re_path(r'login/refresh/?$',jwt_views.TokenRefreshView.as_view(),name="Refresh Login"),
-    re_path(r'initBiometricAuthentication/?$',views.InitBiometricAuthentication.as_view(),name="InitBiometricAuthentication"),
+    re_path(r'getBiometricChallenge/?$',views.GetBiometricChallenge.as_view(),name="GetBiometricChallenge"),
     re_path(r'getBiometricToken/?$',views.GenerateBiometricTokenView.as_view(),name="GetBiometricToken"),
     re_path(r'logout/?$',views.LogoutUserView.as_view(),name="Logout")
     #path('', include())
