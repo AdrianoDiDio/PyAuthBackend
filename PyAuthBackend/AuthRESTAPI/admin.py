@@ -10,7 +10,7 @@ class CustomUserAdmin(UserAdmin):
             'Custom Field Heading',
             {
                 'fields': (
-                    'biometricToken'
+                    'biometricToken',
                 ),
             },
         ),
