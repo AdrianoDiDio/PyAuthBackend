@@ -46,7 +46,6 @@ PublicKey = openapi.Parameter('publicKey', openapi.IN_QUERY, description="Public
 class GetBiometricChallenge(APIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
-    serializer_class = UserPublicKeySerializer
 
     def get_object(self):
         return User.objects.get(username=self.request.user)
