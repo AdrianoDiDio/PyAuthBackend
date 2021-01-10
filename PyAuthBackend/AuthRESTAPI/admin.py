@@ -6,6 +6,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
         *UserAdmin.fieldsets,
+        (
             'Custom Field Heading',
             {
                 'fields': (
