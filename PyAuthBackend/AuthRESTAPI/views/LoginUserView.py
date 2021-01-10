@@ -38,7 +38,7 @@ BiometricToken = openapi.Parameter('biometricToken', openapi.IN_QUERY, descripti
 ))
         
 class LoginTokenObtainPairView(jwt_views.TokenObtainPairView):
-    def get_serializer_class(self):
-        if( "biometricToken" in self.request.data):
-            return BiometricTokenObtainPairSerializer
-        return TokenObtainPairSerializer
+    serializer_class = TokenObtainPairSerializer
+
+class BiometricLoginTokenObtainPairView(jwt_views.TokenObtainPairView):
+    serializer_class = BiometricTokenObtainPairSerializer
