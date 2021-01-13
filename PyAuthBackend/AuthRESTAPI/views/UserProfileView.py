@@ -31,7 +31,7 @@ from drf_yasg.utils import swagger_auto_schema
                     )
                 }
             )
-        },
+        }
 ))
 class UserProfileViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):
     permission_classes = [permissions.IsAuthenticated]

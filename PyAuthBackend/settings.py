@@ -176,6 +176,13 @@ SWAGGER_SETTINGS = {
         'drf_yasg.inspectors.SimpleFieldInspector',
         'drf_yasg.inspectors.StringDefaultFieldInspector',
     ],
+    'SECURITY_DEFINITIONS': {
+        'Access Token': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
 }
 
 LOGIN_URL = 'rest_framework:login'
