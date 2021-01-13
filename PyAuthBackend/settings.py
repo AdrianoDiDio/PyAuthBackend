@@ -100,7 +100,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'AdrianoDD$PyAuthBackend',
         'USER': 'AdrianoDD',
-        'PASSWORD': '',
+        'PASSWORD': 'bFa3NSV7MyZt8t2',
         'HOST': 'AdrianoDD.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }
@@ -165,7 +165,17 @@ USE_L10N = True
 USE_TZ = True
 SWAGGER_SETTINGS = {
     'LOGIN_URL' : 'rest_framework:login',
-    'LOGOUT_URL' : 'rest_framework:logout'
+    'LOGOUT_URL' : 'rest_framework:logout',
+    'DEFAULT_FIELD_INSPECTORS': [
+        'drf_yasg.inspectors.CamelCaseJSONFilter',
+        'drf_yasg.inspectors.InlineSerializerInspector',
+        'drf_yasg.inspectors.RelatedFieldInspector',
+        'drf_yasg.inspectors.ChoiceFieldInspector',
+        'drf_yasg.inspectors.FileFieldInspector',
+        'drf_yasg.inspectors.DictFieldInspector',
+        'drf_yasg.inspectors.SimpleFieldInspector',
+        'drf_yasg.inspectors.StringDefaultFieldInspector',
+    ],
 }
 
 LOGIN_URL = 'rest_framework:login'
