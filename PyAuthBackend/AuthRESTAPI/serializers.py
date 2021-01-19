@@ -27,11 +27,11 @@ class UserSerializer(serializers.ModelSerializer):
         style={'input_type': 'password', 'placeholder': 'Password'},
         min_length=8
     )
-    
+
     def validate(self, data):
         username = data.get('username')
         password = data.get('password')
-        errors = dict() 
+        errors = dict()
         try:
             validators.validate_password(password=password, user=username)
         except exceptions.ValidationError as e:
@@ -39,14 +39,14 @@ class UserSerializer(serializers.ModelSerializer):
         if errors:
             raise serializers.ValidationError(errors)
         return super(UserSerializer, self).validate(data)
-    
+
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'], validated_data['email'],validated_data['password'])
         return user
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password')
-        
+
 class UserLoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         validators=[UniqueValidator(queryset=User.objects.all())],
@@ -61,7 +61,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'password')
-        
+
 class UserAuthTokenSerializer(serializers.ModelSerializer):
     biometricToken = serializers.CharField(
         required = True,
@@ -88,14 +88,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email')
 
 class BiometricTokenObtainSerializer(TokenObtainSerializer):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].required = False
-        self.fields['password'].required = False
-        self.fields['userId'] = serializers.CharField()
-        self.fields['biometricToken'] = serializers.CharField()
-    
+        #self.fields['username'].required = False
+        #self.fields['password'].required = False
+        self.fields.pop('username')
+        self.fields.pop('password')
+        self.fields['userId'] = serializers.IntegerField(required=True)
+        self.fields['biometricToken'] = serializers.CharField(required=True)
+
     def validate(self,attr):
         #biometricToken = base64.urlsafe_b64decode(attr['biometricToken'])
         authenticate_kwargs = {
@@ -127,7 +129,7 @@ class BiometricTokenObtainPairSerializer(BiometricTokenObtainSerializer):
 
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
-        
+
         update_last_login(None, self.user)
 
-        return data    
+        return data

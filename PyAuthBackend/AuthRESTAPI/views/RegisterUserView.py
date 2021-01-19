@@ -12,7 +12,7 @@ from drf_yasg.utils import swagger_auto_schema
 from django.utils.decorators import method_decorator
 
 @method_decorator(
-    name='create', 
+    name='create',
     decorator=swagger_auto_schema(
         operation_description="Register a new user by providing an Username/Email/Password.",
         responses={
@@ -36,7 +36,7 @@ from django.utils.decorators import method_decorator
 class RegisterUserView(mixins.CreateModelMixin,viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    
+
     def create(self,request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -52,7 +52,7 @@ class RegisterUserView(mixins.CreateModelMixin,viewsets.GenericViewSet):
         response.status=status.HTTP_201_CREATED
         response.headers=headers
         return response
-        
-    
 
- 
+
+
+
