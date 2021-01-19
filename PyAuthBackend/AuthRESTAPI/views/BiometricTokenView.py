@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from PyAuthBackend.AuthRESTAPI.models import User
 from PyAuthBackend.AuthRESTAPI.serializers import UserAuthTokenSerializer
-from PyAuthBackend.AuthRESTAPI.tokens import generateBiometricToken
 from PyAuthBackend.AuthRESTAPI.exceptions import InvalidRSASignature,InvalidBiometricChallenge
 from rest_framework import viewsets,permissions,mixins,status
 from rest_framework.generics import GenericAPIView
