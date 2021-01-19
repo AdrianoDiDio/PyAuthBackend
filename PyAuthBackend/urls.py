@@ -27,7 +27,7 @@ schema_view = get_schema_view(
       description="REST API to handle User Registration/Login.",
       terms_of_service="https://www.google.com/policies/terms/",
       contact=openapi.Contact(email="95adriano@gmail.com"),
-      license=openapi.License(name="BSD License"),
+      license=openapi.License(name="GPLv3 License"),
    ),
    public=True,
 )
