@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from PyAuthBackend.AuthRESTAPI.models import User
-from PyAuthBackend.AuthRESTAPI.serializers import UserAuthTokenSerializer
+from PyAuthBackend.AuthRESTAPI.serializers import UserAuthTokenSerializer,UserBiometricChallengeSerializer
 from PyAuthBackend.AuthRESTAPI.exceptions import InvalidRSASignature,InvalidBiometricChallenge
 from rest_framework import viewsets,permissions,mixins,status
 from rest_framework.generics import GenericAPIView
@@ -53,9 +53,9 @@ class GetBiometricChallenge(APIView):
             challenge = str(uuid.uuid4())
             encodedChallenge = base64.urlsafe_b64encode(challenge.encode()).decode('UTF-8')
             encodedchallengeJSON = {"biometricChallenge" : encodedChallenge}
-            #serializer = UserPublicKeySerializer(userInstance,data=request.data)
-            #serializer.is_valid(raise_exception=True)
-            #serializer.save()
+            serializer = UserBiometricChallengeSerializer(userInstance,data=encodedchallengeJSON)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
             return Response(encodedchallengeJSON,status=status.HTTP_200_OK)
         except exceptions.ValidationError as v:
             raise v
@@ -84,7 +84,6 @@ class GetBiometricChallenge(APIView):
                 required=['publicKey','serverBiometricChallenge','signedBiometricChallenge','nonce'],
                 properties={
                     'publicKey': openapi.Schema(type=openapi.TYPE_STRING),
-                    'serverBiometricChallenge': openapi.Schema(type=openapi.TYPE_STRING),
                     'signedBiometricChallenge': openapi.Schema(type=openapi.TYPE_STRING),
                     'nonce': openapi.Schema(type=openapi.TYPE_NUMBER),
 
@@ -105,7 +104,7 @@ class GenerateBiometricTokenView(APIView):
             userInstance = self.get_object()
             #publicKeyObject = RSA.importKey(base64.urlsafe_b64decode(userInstance.publicKey))
             publicKeyObject = RSA.importKey(base64.urlsafe_b64decode(request.data['publicKey']))
-            originalEncodedChallenge = base64.urlsafe_b64decode(request.data['serverBiometricChallenge']).decode("UTF-8")
+            originalEncodedChallenge = base64.urlsafe_b64decode(userInstance.biometricChallenge).decode("UTF-8")
             originalChallenge = originalEncodedChallenge + request.data['nonce']
             sentChallenge = base64.urlsafe_b64decode(request.data['signedBiometricChallenge'])
             verifierRSA = pkcs1_15.new(publicKeyObject)

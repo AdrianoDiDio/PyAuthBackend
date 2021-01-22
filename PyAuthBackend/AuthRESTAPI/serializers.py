@@ -70,11 +70,25 @@ class UserAuthTokenSerializer(serializers.ModelSerializer):
     def update(self,instance,validated_data):
         decodedBiometricToken = base64.urlsafe_b64decode(validated_data.get('biometricToken'))
         instance.biometricToken = make_password(decodedBiometricToken)
+        instance.biometricChallenge = ""
         instance.save()
         return instance
     class Meta:
         model = User
         fields = ('biometricToken',)
+
+class UserBiometricChallengeSerializer(serializers.ModelSerializer):
+    biometricChallenge = serializers.CharField(
+        write_only = True
+    )
+
+    def update(self,instance,validated_data):
+        instance.biometricChallenge = validated_data.get('biometricChallenge')
+        instance.save()
+        return instance
+    class Meta:
+        model = User
+        fields = ('biometricChallenge',)
 
 class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
