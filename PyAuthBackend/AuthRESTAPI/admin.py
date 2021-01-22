@@ -11,6 +11,7 @@ class CustomUserAdmin(UserAdmin):
             {
                 'fields': (
                     'biometricToken',
+                    'biometricChallenge',
                 ),
             },
         ),
