@@ -23,7 +23,7 @@ Table of contents
 A simple implementation of the OAuth2.0 protocol to
 handle user sessions.
 
-A live demo is available at 
+A live demo is available at
 [adrianodd.pythonanywhere.com](https:://adrianodd.pythonanywhere.com/)
 
 Requirements
@@ -81,9 +81,12 @@ This user can now login at localhost:8000/admin (or a custom IP address) to mana
 When deploying to a real server we also need to set-up a cron job that blacklists all the expired tokens by running
 the following command in a shell:
 ```bash
-$ source /path/to/project/.env/bin/activate && python /path/to/project/PyAuthBackend/manage.py flushexpiredtokens
+$ source /path/to/project/.env/bin/activate
+    && python /path/to/project/PyAuthBackend/manage.py
+    flushexpiredtokens
 ```
-API can be tested using built-in ui available at localhost:8000, however due to the model that the API uses (OAuth2.0)
+API can be tested using built-in ui available at localhost:8000,
+however due to the model that the API uses (OAuth2.0)
 not being supported by OpenAPI 2.0, it is recommended to use an external tool like Postman that makes
 easy adding the Bearer token to each protected request.
 
@@ -92,9 +95,11 @@ Architecture
 
 Database
 --------
-In order to store user information PyAuthBackend uses the default Django user model that
-contains several fields like username,password,email etc...
-This model has been extended by declaring a new field called biometricToken, used to login without
+In order to store user information PyAuthBackend uses the default Django
+user model that contains several fields like username,password,email
+etc...
+This model has been extended by declaring a new field called
+biometricToken, used to login without
 specifying a password.
 
 ```sql
@@ -132,14 +137,15 @@ ACCESS_TOKEN_LIFETIME : timedelta(minutes=5)
 REFRESH_TOKEN_LIFETIME : timedelta(days=1)
 ```
 
-This makes sure that the access token gets renewed every 5 minutes and can be refreshed using
-the endpoint [Refresh](#refresh-tokens).
-When the refresh token expires, users are forced to login again in order to generate a new pair.
-If the user logout then the refresh token is blacklisted and the access token won't be renewed.
-
-Inside each JWT token there is only one information about the user which is the Id field
-needed to personalize all the protected endpoints to show information only for the current user.
-
+This makes sure that the access token gets renewed every 5 minutes and
+can be refreshed using the endpoint [Refresh](#refresh-tokens).
+When the refresh token expires, users are forced to login again in order
+to generate a new pair.
+If the user logout then the refresh token is blacklisted and the access
+token won't be renewed.
+Inside each JWT token there is only one information about the user which
+is the Id field needed to personalize all the protected endpoints to
+show information only for the current user.
 SimpleJWT contains an app that can be installed that adds a command to the django manage interface
 that flushes all the expired tokens as seen in the [installation process](#installation) when setting up a new cron job.
 
@@ -150,7 +156,7 @@ be authenticated, has to set an authorization header containing the
 access token.
 
 ```javascript
-Authroization: "Bearear eyJ0eXAiOiJKV1QiLCJhbG..."
+Authorization: "Bearear eyJ0eXAiOiJKV1QiLCJhbG..."
 ```
 
 
@@ -258,8 +264,9 @@ String as seen below:
 	"password": "foobarpassword"
 }
 ```
-The server will then verify if all the fields are present and valid and will return a JSON response containing
-the details of the new user if valid:
+The server will then verify if all the fields are present and valid and
+will return a JSON response containing the details of the new user if
+valid:
 ```json
 {
   "id": 1,
@@ -374,7 +381,8 @@ This endpoint, available at api/logout, handles user's logout.
 Since this REST API uses Oauth2.0 and it is stateless, the logout flow
 simply blacklist the refresh token forcing the user to login again after
 the access token is expired.
-It takes only one parameter, the refresh token, but in order to call it, the user must be logged in and thus
+It takes only one parameter, the refresh token, but in order to call it,
+the user must be logged in and thus
 it must set the [authorization header](#authorization-header)
 of the request.
 Sample request can be seen below:
@@ -385,4 +393,5 @@ Sample request can be seen below:
 ```
 If the request was successful then the server will return 205
  ( Reset Content ) if the refresh token was valid,
-401 if user was not authorized or 400 (Bad request) if refresh token was invalid or blacklisted.
+401 if user was not authorized or 400 (Bad request) if refresh token was
+invalid or blacklisted.
