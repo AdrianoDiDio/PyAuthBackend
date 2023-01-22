@@ -100,7 +100,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'AdrianoDD$PyAuthBackend',
         'USER': 'AdrianoDD',
-        'PASSWORD': '',
+        'PASSWORD': SECRET_KEY,
         'HOST': 'AdrianoDD.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }

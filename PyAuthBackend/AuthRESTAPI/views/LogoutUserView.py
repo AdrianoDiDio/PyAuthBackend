@@ -10,9 +10,9 @@ from django.utils.decorators import method_decorator
 @method_decorator(
     name='post',
     decorator=swagger_auto_schema(
-        operation_description="Refresh the user access token using the refresh token.",
+        operation_description="Blacklist the refresh token making it impossible to refresh the access token when expired.",
         responses={
-            400: 'if refresh token is not valid or it is blacklisted.',
+            400: 'if refresh token is not valid or it is already blacklisted.',
             200: Schema(
                 type=TYPE_OBJECT,
                 properties={
