@@ -24,7 +24,7 @@ A simple implementation of the OAuth2.0 protocol to
 handle user sessions.
 
 A live demo is available at
-[adrianodd.pythonanywhere.com](https:://adrianodd.pythonanywhere.com/)
+[adrianodd.pythonanywhere.com](https://adrianodd.pythonanywhere.com/)
 
 Requirements
 ============
